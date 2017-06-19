@@ -39,8 +39,8 @@ class Trajectory:
     def build_matrix(self):
         ''' '''
         for mol1 in self.molecules:
+            self._write_index(mol1)
             for mol2 in self.molecules:
-                self._write_index(mol1)
                 self._write_index(mol2)
                 self._run_g_dist(mol1,mol2)
 
