@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 ''' Tool for generating histograms of torsion dihedral distribution
 Input:
  - xyz file to be converted to gro
@@ -21,6 +22,8 @@ import os
 import sys
 import shutil
 import numpy as np
+import matplotlib as mpl
+mpl.use('Agg')
 import matplotlib.pyplot as pl
 import subprocess as s
 
@@ -129,7 +132,7 @@ class Results:
         pl.style.use('ggplot')
         pl.style.use('seaborn-poster')
         pl.rcParams['figure.figsize'] = 16,9
-        yx = pl.hist(self.angle_vals, bins=np.linspace(-180,180,int(interval)), histtype='step', label=angle_id.split()[1])
+        yx = pl.hist(self.angle_vals, bins=np.linspace(-180,180,int(interval)),  label=angle_id.split()[1])
         y, x = yx[0], yx[1]
         pl.xlim(-180,180)
         pl.xticks([-180,-90,0,90,180])
