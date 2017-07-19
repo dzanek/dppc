@@ -7,8 +7,8 @@ class Trajectory:
 
     def _to_gro(self):
         ''' '''
-        new_name = '.'.join(self.fname.split('.')[:-1])+'.gro'
-        s.call('obabel -i {} {} -o gro -O {}'.format(self.extension, self.fname, new_name), shell=True)
+        self.new_name = '.'.join(self.fname.split('.')[:-1])+'.gro'
+        s.call('obabel -i {} {} -o gro -O {}'.format(self.extension, self.fname, self.new_name), shell=True)
         return new_name
 
     def __init__(self, f_traj):
@@ -38,14 +38,14 @@ class Trajectory:
 
     def build_matrix(self):
         ''' '''
-        for mol1 in self.molecules:
-            self._write_index(mol1)
+        for mol1 in self.molecules.iteritems():
             for mol2 in self.molecules:
-                self._write_index(mol2)
                 self._run_g_dist(mol1,mol2)
 
-
-
+    def _run_g_dist(mol1,mol2):
+        ''' tuples (id, atoms) '''
+        formats  = [self.new_name, self.new_name]+mol1[1]+mol2[1]+['/tmp/dist.tmp']
+        command = 'gmx distance -f gro.gro -s gro.gro -rmpbc -select 'com of resnr 1 2 3 4 plus com of resnr 10 20 30 40' -oall data.xvg'.format(*formats)
 
 def main(f_traj, min_neighbour):
     ''' '''
